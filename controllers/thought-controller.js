@@ -30,22 +30,24 @@ module.exports = {
 
   // create thought
   async createThought(req, res) {
-    try {
-      const thought = await Thought.create(req.body);
-      const user = await User.findOneAndUpdate(
-        { _id: req.body.userId },
-        { $addToSet: { thoughts: thought._id } },
+    Thought.create(req.body)
+    .then(({ _id }) => {
+      return User.findOneAndUpdate(
+        { username: req.body.username },
+        { $addToSet: { thoughts: _id } },
         { new: true }
       );
+    })
+    .then((user) => {
       if (!user) {
         res.status(404).json({ message: 'No user found with this id!' });
         return;
       }
-      res.json(thought);
-    } catch (err) {
-      console.log(err);
-      res.status(400).json(err);
-    }
+      res.json(user);
+    })
+    .catch((err) => res.json(err));
+
+
   }, // createThought
 
   // update thought by id
