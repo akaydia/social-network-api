@@ -22,7 +22,7 @@ router
     .put(updateThought)
     .delete(deleteThought);
 
-// Set up POST
+// Set up POST at /api/thoughts/:thoughtId/reactions
 router
     .route('/:thoughtId/reactions')
     .post(addReaction);

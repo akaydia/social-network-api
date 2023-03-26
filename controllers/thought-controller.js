@@ -31,23 +31,21 @@ module.exports = {
   // create thought
   async createThought(req, res) {
     Thought.create(req.body)
-    .then(({ _id }) => {
-      return User.findOneAndUpdate(
-        { username: req.body.username },
-        { $addToSet: { thoughts: _id } },
-        { new: true }
-      );
-    })
-    .then((user) => {
-      if (!user) {
-        res.status(404).json({ message: 'No user found with this id!' });
-        return;
-      }
-      res.json(user);
-    })
-    .catch((err) => res.json(err));
-
-
+      .then(({ _id }) => {
+        return User.findOneAndUpdate(
+          { username: req.body.username },
+          { $addToSet: { thoughts: _id } },
+          { new: true }
+        );
+      })
+      .then((user) => {
+        if (!user) {
+          res.status(404).json({ message: 'No user found with this id!' });
+          return;
+        }
+        res.json(user);
+      })
+      .catch((err) => res.json(err));
   }, // createThought
 
   // update thought by id
